@@ -665,4 +665,21 @@ export default {
         }); 
     },
 
+    cambiarEstadoMedidaRemediacion(context, id){
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
+            axios({
+                url: `${ apiUrl }/remediacion/verificacion/cambiar/${ id }`,
+                method: 'PUT'
+            })
+            .then(response => {
+                resolve(response);
+            })
+            .catch(error => {
+                reject(error);
+            });
+        }); 
+    },
+
 }

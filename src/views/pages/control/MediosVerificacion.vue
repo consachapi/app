@@ -32,7 +32,7 @@
                 <ais-hits>
                     <div class="items-grid-view vx-row match-height">
                         <div class="vx-col lg:w-1/3 sm:w-1/2 w-full" v-for="item in items" :key="item.id">
-                            <item-grid-view :item="item" @editar-cverificacion="editaControlVerificacion">
+                            <item-grid-view :item="item" @editar-cverificacion="editaControlVerificacion" @actualizar-cverificacion="actualizarMedidaControl">
                                 <template slot="action-buttons">
                                     <div class="flex flex-wrap">
                                         <div
@@ -476,6 +476,10 @@ export default {
                 this.$vs.loading.close();
                 this.showMessageError(error.response.status, error.response.data.message);
             });
+        },
+
+        actualizarMedidaControl(){
+            this.getMedioVerificacion(this.medidaControlId);
         },
 
         statusColor(status) {

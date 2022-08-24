@@ -470,4 +470,21 @@ export default {
         }); 
     },
 
+    cambiarEstadoMedidaControl(context, id){
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
+            axios({
+                url: `${ apiUrl }/control/verificacion/cambiar/${ id }`,
+                method: 'PUT'
+            })
+            .then(response => {
+                resolve(response);
+            })
+            .catch(error => {
+                reject(error);
+            });
+        }); 
+    },
+
 }

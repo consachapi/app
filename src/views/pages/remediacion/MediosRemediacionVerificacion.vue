@@ -35,7 +35,7 @@
                 <ais-hits>
                     <div class="items-grid-view vx-row match-height">
                         <div class="vx-col lg:w-1/3 sm:w-1/2 w-full" v-for="item in items" :key="item.id">
-                            <item-grid-view :item="item">
+                            <item-grid-view :item="item" @editar-cverificacion="editaRemediacionVerificacion" @actualizar-rverificacion="actualizarMedidaRemediacion">
                                 <template slot="action-buttons">
                                     <div class="flex flex-wrap">
                                         <div
@@ -475,6 +475,19 @@ export default {
                 this.$vs.loading.close();
                 this.showMessageError(error.response.status, error.response.data.message);
             });
+        },
+
+        editaRemediacionVerificacion(value){
+            console.log('AAA=' + value);
+            this.sidebarData = {
+                id: this.medidaRemediacionId,
+                data: null
+            }
+            this.toggleDataSidebar(true)
+        },
+
+        actualizarMedidaRemediacion(){
+            this.getMedioVerificacion(this.medidaRemediacionId);
         },
 
         statusColor(status) {
