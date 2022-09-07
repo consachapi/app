@@ -1,5 +1,6 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from 'vue';
+import Router from 'vue-router';
+import { Role } from './helpers/role.js';
 
 Vue.use(Router)
 
@@ -34,7 +35,8 @@ const router = new Router({
                         ],
                         pageTitle: 'Medidas de Control',
                         no_scroll: true,
-                        parent: 'app-medidas-control-producto'
+                        parent: 'app-medidas-control-producto',
+                        authorize: [Role.Admin]
                     }, 
                 },
                 {
@@ -48,7 +50,8 @@ const router = new Router({
                         ],
                         pageTitle: 'Medidas de Control',
                         no_scroll: true,
-                        parent: 'app-medidas-control-riesgo'
+                        parent: 'app-medidas-control-riesgo',
+                        authorize: [Role.Admin]
                     }, 
                 }, 
                 {
@@ -67,7 +70,8 @@ const router = new Router({
                                 ],
                                 pageTitle: 'Medidas de Control',
                                 no_scroll: true,
-                                parent: 'app-medidas-control-detalle'
+                                parent: 'app-medidas-control-detalle',
+                                authorize: [Role.Admin]
                             },
                         }, {
                             path: '/app/medidas/control/detalle/verificacion/:id',
@@ -81,7 +85,8 @@ const router = new Router({
                                 ],
                                 pageTitle: 'Medidas de Control',
                                 no_scroll: true,
-                                parent: 'app-medidas-control-detalle'
+                                parent: 'app-medidas-control-detalle',
+                                authorize: [Role.Admin]
                             },
                         }
                     ],
@@ -98,7 +103,8 @@ const router = new Router({
                         ],
                         pageTitle: 'Medidas de Remediación',
                         no_scroll: true,
-                        parent: 'app-medidas-remediacion-deficiencia'
+                        parent: 'app-medidas-remediacion-deficiencia',
+                        authorize: [Role.Admin]
                     }, 
                 },
                 {
@@ -117,7 +123,8 @@ const router = new Router({
                                 ],
                                 pageTitle: 'Medidas de Remediación',
                                 no_scroll: true,
-                                parent: 'app-medidas-remediacion-medidas'
+                                parent: 'app-medidas-remediacion-medidas',
+                                authorize: [Role.Admin]
                             },
                         }, {
                             path: '/app/medidas/remediacion/detalle/verificacion/:id',
@@ -131,7 +138,8 @@ const router = new Router({
                                 ],
                                 pageTitle: 'Medidas de Remediación',
                                 no_scroll: true,
-                                parent: 'app-medidas-remediacion-medidas'
+                                parent: 'app-medidas-remediacion-medidas',
+                                authorize: [Role.Admin]
                             },
                         }
                     ],
@@ -156,7 +164,8 @@ const router = new Router({
                                 ],
                                 pageTitle: 'Control y Remediación',
                                 no_scroll: true,
-                                parent: 'app-medidas-cremediacion-mcontrol'
+                                parent: 'app-medidas-cremediacion-mcontrol',
+                                authorize: [Role.Admin, Role.User]
                             }
                         }, {
                             path: '/app/medidas/cremediacion/mcontrol/actividad/:id',
@@ -170,7 +179,8 @@ const router = new Router({
                                 ],
                                 pageTitle: 'Control y Remediación',
                                 no_scroll: true,
-                                parent: 'app-medidas-cremediacion-mcontrol'
+                                parent: 'app-medidas-cremediacion-mcontrol',
+                                authorize: [Role.Admin, Role.User]
                             },
                         }
                     ],
@@ -190,7 +200,8 @@ const router = new Router({
                                 ],
                                 pageTitle: 'Control y Remediación',
                                 no_scroll: true,
-                                parent: 'app-medidas-cremediacion-mremediacion'
+                                parent: 'app-medidas-cremediacion-mremediacion',
+                                authorize: [Role.Admin, Role.User]
                             }
                         }, {
                             path: '/app/medidas/cremediacion/mremediacion/actividad/:id',
@@ -204,7 +215,8 @@ const router = new Router({
                                 ],
                                 pageTitle: 'Control y Remediación',
                                 no_scroll: true,
-                                parent: 'app-medidas-cremediacion-mremediacion'
+                                parent: 'app-medidas-cremediacion-mremediacion',
+                                authorize: [Role.Admin, Role.User]
                             },
                         }
                     ]
@@ -219,7 +231,9 @@ const router = new Router({
                             { title: 'Home', url: '/' },
                             { title: 'Productos', active: true }
                         ],
-                        pageTitle: 'Mantenimiento'
+                        pageTitle: 'Mantenimiento',
+                        parent: 'app-mantenimiento-producto',
+                        authorize: [Role.Admin]
                     },
                 },
                 /************************************************************************************/
@@ -239,7 +253,8 @@ const router = new Router({
                                 ],
                                 pageTitle: 'Usuarios y Acceso',
                                 no_scroll: true,
-                                parent: 'app-acceso-persona-lista'
+                                parent: 'app-acceso-persona-lista',
+                                authorize: [Role.Admin]
                             }
                         }, {
                             path: '/app/acceso/persona/detalle/:id',
@@ -253,16 +268,26 @@ const router = new Router({
                                     { title: 'Detalle', active: true }
                                 ],
                                 pageTitle: 'Usuarios y Acceso',
-                                parent: 'app-acceso-persona-lista'
+                                parent: 'app-acceso-persona-lista',
+                                authorize: [Role.Admin]
                             },
                         }
                     ]
                 },
                 /************************************************************************************/
                 {
-                    path: '/configuracion',
-                    name: 'config-app-page',
-                    component: () => import('./views/pages/config/Configuracion.vue')
+                    path: '/app/configuracion/parametro',
+                    name: 'app-configuracion-parametro',
+                    component: () => import('./views/pages/config/Configuracion.vue'),
+                    meta: {
+                        breadcrumb: [
+                            { title: 'Inicio', url: '/' },
+                            { title: 'Parámetros', active: true }
+                        ],
+                        pageTitle: 'Configuración',
+                        parent: 'app-configuracion-parametro',
+                        authorize: [Role.Admin]
+                    },
                 },
             ],
         }, {

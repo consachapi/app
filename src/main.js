@@ -34,7 +34,16 @@ router.beforeEach((to, from, next) => {
         if (!store.getters.isLoggedIn) {
             next('/login');
         } else {
-            next();
+            if(to.meta.authorize === undefined){
+                next();
+            } else {
+                const findRole =  to.meta.authorize.find(item => item === store.getters.userRole);
+                if(findRole === undefined){
+                    next('/');
+                } else {
+                    next();
+                }
+            }
         }
     } else if(visit) {
         if (store.getters.isLoggedIn) {

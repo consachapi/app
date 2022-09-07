@@ -34,6 +34,8 @@ const actions = {
       })
       .then(response => {
         if(response.status === 200){
+          const encodedRole = window.btoa(response.data.role);
+          localStorage.setItem('role', encodedRole);
           commit('role_user', response.data);
         }
         resolve(response);
@@ -78,6 +80,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       commit('logout')
       localStorage.removeItem('token');
+      localStorage.removeItem('role');
       resolve()
     })
   },

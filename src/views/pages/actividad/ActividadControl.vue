@@ -166,24 +166,6 @@
             </div>
         </div>
 
-        <vs-popup title="Subir documento" :active.sync="popupSubirArchivo">
-            <vx-card class="mb-base" no-shadow card-border>
-                <vs-upload 
-                    text="Agregar documento" 
-                    fileName='file' 
-                    :action="upload"
-                    :headers="headers"
-                    @on-success="successUpload"
-                    @on-error="errorUpload"
-                    accept=".pdf"
-                />
-            </vx-card>
-            <vs-divider/>
-            <div class="flex flex-wrap-reverse items-center flex-grow justify-end">
-                <vs-button @click="popupSubirArchivo=false" icon-pack="feather" icon="icon-x-circle" color="danger" type="border" class="mb-2 ml-4 mr-4">Cancelar</vs-button>
-            </div>
-        </vs-popup>
-
         <vs-popup title="Documento" :active.sync="popupVerDocumento">
             <div style="border-radius:5px; border:1px solid #d5dbe0" class="mb-6">
                 <embed :src="pdf" frameborder="0" width="100%" height="500px" type="application/pdf">
@@ -204,13 +186,55 @@
             </div> 
         </vs-popup>
 
+        <vs-popup title="Cargar documento" :active.sync="popupSubirArchivo">
+
+            <vue-dropzone v-if="upload!==null"
+                ref="myVueDropzone"
+                :include-styling="false"
+                :useCustomSlot="true"
+                id="dropzone"
+                @vdropzone-upload-progress="uploadProgress"
+                :options="dropzoneOptions"
+                @vdropzone-file-added="fileAdded"
+                @vdropzone-error="failed"
+                @vdropzone-sending-multiple="sendingFiles"
+                @vdropzone-success-multiple="success"
+                >
+                <div class="dropzone-container">
+                    <div class="file-selector">
+                        <figure>
+                            <svg
+                            width="104px"
+                            height="104px"
+                            viewBox="0 0 104 104"
+                            version="1.1"
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            >
+                            </svg>
+                        </figure>
+                    </div>
+                </div>
+            </vue-dropzone>
+            <vs-progress :percent="progress" color="#24c1a0"></vs-progress>
+
+            <div class="flex flex-wrap-reverse items-center flex-grow justify-end mt-4">
+                <vs-button @click="popupSubirArchivo=false" icon-pack="feather" icon="icon-x-circle" color="danger" type="border" class="mb-2 ml-4 mr-4">Cancelar</vs-button>
+            </div>
+
+        </vs-popup>
+
     </div>
 </template>
 <script>
+import vue2Dropzone from "vue2-dropzone";
+import "vue2-dropzone/dist/vue2Dropzone.min.css";
+
 import ListaActividades from './components/ListaActividades.vue';
 import { apiUrl } from '@/constants/config';
 export default {
     components: {
+        vueDropzone: vue2Dropzone,
         ListaActividades
     },
 
@@ -236,7 +260,6 @@ export default {
             isCompletado: false,
 
             selected: [],
-            popupSubirArchivo: false,
             popupVerDocumento: false,
             popupEliminar: false,
 
@@ -247,6 +270,29 @@ export default {
 
             pdf: null,
             idDocumentoControl: null,
+
+
+            upload: null,
+            progress: 0,
+            tempAttachments: [],
+            attachments: [],
+            dropzoneOptions: {
+                url: apiUrl + `/documento/control/upload/`,
+                maxFilesize: 102400000,
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                },
+                paramName: () => "file",
+                dictDefaultMessage: "Upload Files Here xD",
+                includeStyling: false,
+                previewsContainer: false,
+                thumbnailWidth: 250,
+                thumbnailHeight: 140,
+                uploadMultiple: true,
+                parallelUploads: 20,
+                acceptedFiles: ".pdf"
+            },
+            popupSubirArchivo: false,
         }
     },
 
@@ -256,6 +302,10 @@ export default {
                 return this.$refs.table.currentx;
             }
             return 0;
+        },
+
+        getTempAttachments() {
+            return this.tempAttachments;
         },
     },
 
@@ -330,7 +380,6 @@ export default {
 			}).catch(() => {});
         },
 
-
         showDocumentos(item){
             this.actividadControlId = item.id;
             this.titleActividad = item.desc;
@@ -386,10 +435,70 @@ export default {
             if(this.isCompletado){
                 this.showMessageAlert('La actividad ya esta completado o finalizado.');
                 return;
-            } 
+            }
+
+            this.upload = this.actividadControlId;
 
             this.popupSubirArchivo = true;
-            this.upload = this.upload + '/' + this.actividadControlId;
+            this.progress = 0;
+            this.dropzoneOptions.url = apiUrl + `/documento/control/upload/` + this.actividadControlId;
+        },
+
+        fileAdded(file) {
+            console.log(file.size);
+            let attachment = {};
+            attachment._id = file.upload.uuid;
+            attachment.title = file.name;
+            attachment.type = "file";
+            attachment.extension = "." + file.type.split("/")[1];
+            attachment.user = JSON.parse(localStorage.getItem("user"));
+            attachment.content = "File Upload by Select or Drop";
+            attachment.thumb = file.dataURL;
+            attachment.thumb_list = file.dataURL;
+            attachment.isLoading = true;
+            attachment.progress = null;
+            attachment.size = file.size;
+            this.tempAttachments = [...this.tempAttachments, attachment];
+        },
+
+        sendingFiles(files, xhr, formData) {
+            console.log("Files sending", files);
+        },
+
+        failed(file, message, xhr){
+            console.log("ERROR: ", message);
+            this.progress = 0,
+            this.tempAttachments = [],
+            this.attachments = [],
+            this.popupSubirArchivo = false;
+            this.upload = null;
+
+            this.$vs.dialog({
+                type: 'alert',
+                color: 'warning',
+                title: `Aviso`,
+                text: 'Ocurrio un error al guardar el documento. \nError: ' + message,
+                acceptText: 'Aceptar',
+            });
+        },
+
+        uploadProgress(file, progress, bytesSent) {
+            this.progress = progress;
+            this.tempAttachments.map(attachment => {
+                if (attachment.title === file.name) {
+                    attachment.progress = `${Math.floor(progress)}`;
+                }
+            });
+        },
+
+        success(file, response) {
+            this.showMessageSuccess("Archivo " + response.nombreAchivo + " guardado de forma correcta.");
+            this.progress = 0,
+            this.tempAttachments = [],
+            this.attachments = [],
+            this.popupSubirArchivo = false;
+            this.upload = null;
+            this.getDocumentosControl(this.actividadControlId);
         },
 
         getDocumentosControl(value){
@@ -432,17 +541,6 @@ export default {
             });
         },
 
-        successUpload(event){
-            this.showMessageSuccess('Se agregó el documento de forma correcta.');
-            this.popupSubirArchivo = false;
-            this.getDocumentosControl(this.actividadControlId);
-        },
-
-        errorUpload(event){
-            const resp = JSON.parse(event.currentTarget.response);
-            this.showMessageError(resp.status, resp.message);
-        },
-
         openPopupVerDocumento(tr){
             this.$vs.loading();
             this.$store.dispatch('cactividad/showDocumentoControl', tr.archivo)
@@ -464,6 +562,7 @@ export default {
                 }
             })
             .catch(error => {
+                console.log(error);
                 this.$vs.loading.close();
                 this.showMessageError(error.response.status, error.response.data.message);
             });
@@ -774,5 +873,20 @@ export default {
         justify-content: center;
     }
   }
+}
+.file-selector {
+  padding: 55px;
+  font-weight: 600;
+  background-color: #f9f9f9;
+  color: #4e5b69;
+  z-index: -9;
+  border-radius: 10px;
+}
+
+.dropzone-container {
+  display: flex;
+  flex-direction: column;
+  border: 1px dashed #ccc;
+  border-radius: 15px;
 }
 </style>

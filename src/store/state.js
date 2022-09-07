@@ -44,11 +44,10 @@ const state = {
 
     success: false,
     token: localStorage.getItem('token') || '',
-    role: '',
+    role: localStorage.getItem('role')===null?'':window.atob(localStorage.getItem('role')) || '',
     nombre: '',
     cargo: '',
     pim: 402094157.00,
-    //ipressName: localStorage.getItem('nipress')===null?'':window.atob(localStorage.getItem('nipress')) || '',
     periodo: '2022',
 }
 

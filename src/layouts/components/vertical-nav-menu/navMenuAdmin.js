@@ -59,28 +59,6 @@ export default [
             }
         ]
     }, 
-    /*{
-        url: null,
-        name: "Mantenimiento",
-        slug: "app-page-mentenimiento",
-        icon: "ServerIcon",
-        submenu: [
-            {
-                url: "/app/mantenimiento/producto",
-                name: "Oficina",
-                slug: "app-mantenimiento-producto",
-            }, {
-                url: "/app/mantenimiento/dispositivo",
-                name: "Dispositivo",
-                slug: "app-mantenimiento-dispositivo",
-            }, {
-                url: "/app/mantenimiento/servicio",
-                name: "Servicio",
-                slug: "app-mantenimiento-servicio",
-            }
-        ]
-    }, */
-    
     {
         url: null,
         name: "Usuarios y Acceso",
@@ -94,10 +72,17 @@ export default [
             },
         ]
     }, {
-        url: "/configuracion",
+        url: null,
         name: "Configuración",
-        slug: "config-app-page",
+        slug: "app-configuracion",
         icon: "SettingsIcon",
+        submenu: [
+            {
+                url: "/app/configuracion/parametro",
+                name: "Parámetros",
+                slug: "app-configuracion-parametro",
+            },
+        ]
     }
 
   ]
