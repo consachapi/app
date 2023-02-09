@@ -58,7 +58,13 @@ export default [
                 slug: "app-medidas-cremediacion-mremediacion",
             }
         ]
-    }, 
+    },
+    {
+        url: "/app/perfil",
+        name: "Mi perfil",
+        slug: "app-perfil",
+        icon: "UserIcon",
+    },
     {
         url: null,
         name: "Usuarios y Acceso",
@@ -78,9 +84,14 @@ export default [
         icon: "SettingsIcon",
         submenu: [
             {
-                url: "/app/configuracion/parametro",
-                name: "Parámetros",
-                slug: "app-configuracion-parametro",
+                url: "/app/configuracion/uejecutora",
+                name: "Unid. ejecutora",
+                slug: "app-configuracion-uejecutora",
+            },
+            {
+                url: "/app/configuracion/apertura",
+                name: "Apertura",
+                slug: "app-configuracion-apertura",
             },
         ]
     }

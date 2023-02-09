@@ -127,8 +127,11 @@
 <script>
 import BackToTop           from 'vue-backtotop'
 import HNavMenu            from "@/layouts/components/horizontal-nav-menu/HorizontalNavMenu.vue"
+
+import navMenuSuper        from "@/layouts/components/vertical-nav-menu/navMenuSuper.js"
 import navMenuAdmin        from "@/layouts/components/vertical-nav-menu/navMenuAdmin.js"
 import navMenuUser         from "@/layouts/components/vertical-nav-menu/navMenuUser.js"
+
 import TheNavbarHorizontal from '@/layouts/components/navbar/TheNavbarHorizontal.vue'
 import TheNavbarVertical   from '@/layouts/components/navbar/TheNavbarVertical.vue'
 import TheFooter           from '@/layouts/components/TheFooter.vue'
@@ -241,9 +244,13 @@ export default {
       this.$store.dispatch("role")
       .then(response => {
         const role = response.data.role;
-        if(role === 'ADMIN'){
+        if(role === 'SUPER'){
+          this.navMenuItems = navMenuSuper;
+        } else if(role === 'ADMIN'){
           this.navMenuItems = navMenuAdmin;
-        } else if(role === 'USER') {
+        } else if(role === 'RESP'){
+          this.navMenuItems = navMenuAdmin;
+        } else {
           this.navMenuItems = navMenuUser;
         }
       })

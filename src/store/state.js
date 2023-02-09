@@ -47,6 +47,11 @@ const state = {
     role: localStorage.getItem('role')===null?'':window.atob(localStorage.getItem('role')) || '',
     nombre: '',
     cargo: '',
+    codigo: localStorage.getItem('codigo')===null?'':window.atob(localStorage.getItem('codigo')) || '',
+    ejecutora: localStorage.getItem('ejecutora')===null?'':window.atob(localStorage.getItem('ejecutora')) || '',
+    anio: localStorage.getItem('anio')===null?'':window.atob(localStorage.getItem('anio')) || '',
+
+    //borrar
     pim: 402094157.00,
     periodo: '2022',
 }

@@ -20,9 +20,9 @@ const getters = {
   userRole: state => state.role,
   userNombre: state => state.nombre,
   userCargo: state => state.cargo,
-  userIpress: state => state.ipress,
-  userIpressName: state => state.ipressName,
-  userServicio: state => state.servicio
+  userCodigo: state => state.codigo,
+  userEjecutora: state => state.ejecutora,
+  userAnio: state => state.anio
 };
 
 export default getters;

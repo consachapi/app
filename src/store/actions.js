@@ -51,6 +51,17 @@ const actions = {
     })
   },
 
+  ejecutora({commit}, data){
+    const encodedEjecutora = window.btoa(data.codigo);
+    const encodedEjecutoraName = window.btoa(data.ejecutora);
+    const encodedAnioEjecucion = window.btoa(data.anio);
+
+    localStorage.setItem('codigo', encodedEjecutora);
+    localStorage.setItem('ejecutora', encodedEjecutoraName);
+    localStorage.setItem('anio', encodedAnioEjecucion);
+    commit('user_ejecutora', data);
+  },
+
   login({ commit }, params) {
     return new Promise((resolve, reject) => {
       delete axios.defaults.headers.common['Access-Control-Allow-Origin'];
@@ -71,6 +82,10 @@ const actions = {
       .catch(err => {
         commit('auth_error');
         localStorage.removeItem('token');
+        localStorage.removeItem('codigo');
+        localStorage.removeItem('ejecutora');
+        localStorage.removeItem('anio');
+        localStorage.removeItem('role');
         reject(err.response);
       })
     })
@@ -80,6 +95,9 @@ const actions = {
     return new Promise((resolve, reject) => {
       commit('logout')
       localStorage.removeItem('token');
+      localStorage.removeItem('codigo');
+      localStorage.removeItem('ejecutora');
+      localStorage.removeItem('anio');
       localStorage.removeItem('role');
       resolve()
     })

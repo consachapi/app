@@ -238,6 +238,21 @@ const router = new Router({
                 },
                 /************************************************************************************/
                 {
+                    path: '/app/perfil',
+                    name: 'app-perfil',
+                    component: () => import('./views/pages/profile/Profile.vue'),
+                    meta: {
+                        breadcrumb: [
+                            { title: 'Home', url: '/' },
+                            { title: 'Mi perfil', active: true }
+                        ],
+                        pageTitle: 'Perfil',
+                        parent: 'app-perfil',
+                        authorize: [Role.Super, Role.Admin, Role.Resp, Role.User]
+                    },
+                },
+                /************************************************************************************/
+                {
                     path: '/app/acceso/persona',
                     name: 'app-acceso-persona-lista',
                     component: () => import('./views/pages/acceso/MainPersona.vue'),
@@ -276,17 +291,31 @@ const router = new Router({
                 },
                 /************************************************************************************/
                 {
-                    path: '/app/configuracion/parametro',
-                    name: 'app-configuracion-parametro',
+                    path: '/app/configuracion/uejecutora',
+                    name: 'app-configuracion-uejecutora',
                     component: () => import('./views/pages/config/Configuracion.vue'),
                     meta: {
                         breadcrumb: [
                             { title: 'Inicio', url: '/' },
-                            { title: 'Parámetros', active: true }
+                            { title: 'Unidades Ejecutoras', active: true }
                         ],
                         pageTitle: 'Configuración',
-                        parent: 'app-configuracion-parametro',
-                        authorize: [Role.Admin]
+                        parent: 'app-configuracion-uejecutora',
+                        authorize: [Role.Super]
+                    },
+                },
+                {
+                    path: '/app/configuracion/apertura',
+                    name: 'app-configuracion-apertura',
+                    component: () => import('./views/pages/config/Apertura.vue'),
+                    meta: {
+                        breadcrumb: [
+                            { title: 'Inicio', url: '/' },
+                            { title: 'Apertura de Ejecución', active: true }
+                        ],
+                        pageTitle: 'Configuración',
+                        parent: 'app-configuracion-apertura',
+                        authorize: [Role.Super]
                     },
                 },
             ],

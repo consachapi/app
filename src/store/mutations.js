@@ -77,11 +77,20 @@ const mutations = {
     state.cargo = data.cargo;
   },
 
+  user_ejecutora(state, data) {
+    state.codigo = data.codigo;
+    state.ejecutora = data.ejecutora;
+    state.anio = data.anio;
+  },
 
   role_error(state) {
+    state.success = false
     state.role = '';
     state.nombre = '';
     state.cargo = '';
+    state.codigo = '';
+    state.ejecutora = '';
+    state.anio = '';
   },
 
   logout(state) {

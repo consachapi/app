@@ -7,7 +7,7 @@
           <span class="hidden sm:inline-block">. Todos los derechos reservados.</span>
         </p>
         <span class="md:flex hidden items-center">
-            <span>Versión 1.4.0</span>
+            <span>Versión 1.5.0</span>
         </span>
     </footer>
 </template>

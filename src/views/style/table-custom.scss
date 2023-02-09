@@ -1,0 +1,98 @@
+.data-table-custom-list-view {
+    .vs-con-input {
+        input {
+            border-radius: 20px;
+            padding: .8rem 1rem 0.8rem 3rem ;
+        }
+        .input-span-placeholder {
+            padding-left: 3rem ;
+            padding-top: .75rem ;
+        }
+        .vs-icon {
+            margin-top: .1rem ;
+            margin-left: 0.6rem ;
+            font-size: 1rem ;
+        }
+        &:first-child{
+            border-top-left-radius: 1.9rem;
+            border-bottom-left-radius: .3rem;
+        }
+        &:last-child{
+            border-top-right-radius: .3rem;
+            border-bottom-right-radius: .3rem;
+        }
+    }
+
+    .vs-table--header {
+        display: flex;
+        flex-wrap: wrap;
+        margin-left: 0.0rem;
+        margin-right: 0.0rem;
+        > span {
+            display: flex;
+            flex-grow: 1;
+        }
+
+        .vs-table--search{
+            padding-top: 0;
+
+            .vs-table--search-input {
+                padding: 1.0rem 2.5rem;
+                font-size: 1rem;
+
+                &+i {
+                    left: 1rem;
+                }
+
+                &:focus+i {
+                    left: 1rem;
+                }
+            }
+        }
+    }
+
+    .vs-table {
+        font-size: 0.88rem;
+        font-weight: 400;
+        tr {
+            box-shadow: 0 4px 20px 0 rgba(0,0,0,.05);
+            td {
+                padding: 10;
+            }
+            td.td-check {
+               padding: 20px !important;
+            }
+        }
+    }
+
+    .vs-table--thead {
+        th {
+            padding: 10;
+            background: #d9d8d8;
+      
+            &:first-child{
+                border-top-left-radius: .3rem;
+                border-bottom-left-radius: .3rem;
+            }
+            &:last-child{
+                border-top-right-radius: .3rem;
+                border-bottom-right-radius: .3rem;
+            }
+            .vs-table-text{
+                text-transform: uppercase;
+                font-weight: 600;
+            }
+        }
+        th.td-check{
+            padding: 0 15px !important;
+        }
+        tr{
+            background: none;
+            box-shadow: none;
+        }
+    }
+
+    .vs-table--pagination {
+        justify-content: center;
+    }
+}

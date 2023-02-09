@@ -1,0 +1,20 @@
+.vx-row-actions-button {
+    display: flex;
+    flex-wrap: nowrap;
+
+    & > .vx-col {
+        padding: 0 1rem;
+    }
+
+    &.match-height>.vx-col {
+        display: flex;
+    }
+
+    &.no-gutter {
+        margin: 0;
+
+        & > .vx-col {
+            padding: 0;
+        }
+    }
+}
