@@ -1,5 +1,5 @@
-import axios from 'axios';
-import { apiUrl, apiAuth } from '@/constants/config';
+//import axios from 'axios';
+//import { apiUrl, apiAuth } from '@/constants/config';
 
 const actions = {
   updateVerticalNavMenuWidth({ commit }, width) {
@@ -23,7 +23,7 @@ const actions = {
   updateUserInfo({ commit }, payload) {
     commit('UPDATE_USER_INFO', payload)
   },
-
+/*
   role({ commit }) {
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
@@ -110,7 +110,7 @@ const actions = {
       localStorage.removeItem('msg');
     }
     commit('notify_active', enabled);
-  }
+  }*/
 }
 
 export default actions

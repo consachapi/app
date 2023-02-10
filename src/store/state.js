@@ -2,6 +2,8 @@ import navbarSearchAndPinList from "@/layouts/components/navbar/navbarSearchAndP
 import themeConfig from "@/../themeConfig.js"
 import colors from "@/../themeConfig.js"
 
+
+/*
 // *From Auth - Data will be received from auth provider
 const userDefaults = {
   uid         : 0,          // From Auth
@@ -11,6 +13,8 @@ const userDefaults = {
   status      : "online",
   userRole    : "admin"
 }
+
+*/
 const is_touch_device = () => {
   var prefixes = ' -webkit- -moz- -o- -ms- '.split(' ');
   var mq = function(query) {
@@ -25,7 +29,7 @@ const is_touch_device = () => {
 }
 
 const state = {
-    AppActiveUser           : userDefaults,
+    //AppActiveUser           : userDefaults,
     bodyOverlay             : false,
     isVerticalNavMenuActive : true,
     is_touch_device         : is_touch_device(),
@@ -40,6 +44,7 @@ const state = {
     themePrimaryColor       : colors.primary,
     windowWidth: null,
 
+    /*
     notify: localStorage.getItem('msg') === null ? false : true || false,
 
     success: false,
@@ -54,6 +59,8 @@ const state = {
     //borrar
     pim: 402094157.00,
     periodo: '2022',
+
+*/
 }
 
 export default state

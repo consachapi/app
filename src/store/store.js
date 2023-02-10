@@ -8,7 +8,8 @@ import actions from "./actions"
 
 Vue.use(Vuex)
 
-import moduleAcceso from './acceso/moduleAcceso.js';
+import moduleAuth from './auth/moduleAuth.js';
+//import moduleAcceso from './acceso/moduleAcceso.js';
 import moduleControl from './control/moduleControl.js';
 import moduleRemediacion from './remediacion/moduleRemediacion.js';
 import moduleCActividad from './cactividad/moduleCActividad.js';
@@ -20,9 +21,10 @@ export default new Vuex.Store({
     state,
     actions,
     modules: {
+        auth: moduleAuth,
         control: moduleControl,
         remediacion: moduleRemediacion,
-        acceso: moduleAcceso,
+        //acceso: moduleAcceso,
         cactividad: moduleCActividad,
         ractividad: moduleRActividad
     },

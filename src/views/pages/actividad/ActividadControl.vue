@@ -231,7 +231,7 @@ import vue2Dropzone from "vue2-dropzone";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
 
 import ListaActividades from './components/ListaActividades.vue';
-import { apiUrl } from '@/constants/config';
+import { apiUrl } from '@/environment/env.js';
 export default {
     components: {
         vueDropzone: vue2Dropzone,

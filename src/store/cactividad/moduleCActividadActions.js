@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { apiUrl } from '@/constants/config';
+import { apiUrl } from '@/environment/env.js';
 
 export default {
     fetchDocumentosControlByActividadControl(context, id){

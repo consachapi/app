@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+
 import { Role } from './helpers/role.js';
+import auth from '@/auth/auth-service';
 
 Vue.use(Router)
 
@@ -344,6 +346,36 @@ router.afterEach(() => {
     if (appLoading) {
         appLoading.style.display = "none";
     }
-})
+});
 
-export default router
+router.beforeEach((to, from, next) => {
+    let requereAuth = to.matched.some(record => record.meta.requiresAuth);
+    let requireVisit = to.matched.some(record => record.meta.requiresVisitor);
+
+    if(requereAuth){
+        if (!auth.isAuthenticated()) {
+            router.push({ path: '/login', query: { to: to.path } });
+        } else {
+            if(to.meta.authorize === undefined){
+                next();
+            } else {
+                const findRole =  to.meta.authorize.find(item => item === auth.activeUserInfo().role);
+                if(findRole === undefined){
+                    next('/');
+                } else {
+                    next();
+                }
+            }
+        }
+    } else if(requireVisit) {
+        if (auth.isAuthenticated()) {
+            next('/');
+        } else {
+            next();
+        }
+    } else {
+        next();
+    } 
+});
+
+export default router;

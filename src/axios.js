@@ -1,7 +1,19 @@
 // axios
 import axios from 'axios';
-import { apiUrl } from '@/constants/config';
+import store from '@/store/store.js';
 
+import { apiUrl, apiAuth } from '@/environment/env.js';
+
+export default axios.create({
+    baseURL: store.state.auth.isUserLoggedIn() ? apiUrl : apiAuth,
+    withCredentials: false,
+    headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+    }
+});
+
+/*
 const apiCliente =  axios.create({
     baseURL: apiUrl,
     withCredentials: false,
@@ -50,3 +62,4 @@ export default {
     },
     
 }
+*/

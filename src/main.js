@@ -27,35 +27,6 @@ Validator.localize("es", es);
 
 require('./assets/css/iconfont.css');
 
-router.beforeEach((to, from, next) => {
-    let auth = to.matched.some(record => record.meta.requiresAuth);
-    let visit = to.matched.some(record => record.meta.requiresVisitor);
-    if(auth){
-        if (!store.getters.isLoggedIn) {
-            next('/login');
-        } else {
-            if(to.meta.authorize === undefined){
-                next();
-            } else {
-                const findRole =  to.meta.authorize.find(item => item === store.getters.userRole);
-                if(findRole === undefined){
-                    next('/');
-                } else {
-                    next();
-                }
-            }
-        }
-    } else if(visit) {
-        if (store.getters.isLoggedIn) {
-			next('/');
-		} else {
-			next();
-		}
-    } else {
-        next();
-    }
-});
-
 Vue.config.productionTip = false
 
 new Vue({

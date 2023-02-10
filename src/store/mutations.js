@@ -51,59 +51,6 @@ const mutations = {
   UPDATE_WINDOW_WIDTH(state, width) { state.windowWidth = width },
   UPDATE_WINDOW_SCROLL_Y(state, val) { state.scrollY = val },
 
-  UPDATE_USER_INFO(state, payload) {
-    let userInfo = JSON.parse(localStorage.getItem("userInfo")) || state.AppActiveUser
-    for (const property of Object.keys(payload)) {
-      if (payload[property] != null) {
-        state.AppActiveUser[property] = payload[property]
-        userInfo[property] = payload[property]
-      }
-    }
-    localStorage.setItem("userInfo", JSON.stringify(userInfo))
-  },
-
-  auth_success(state, data) {
-    state.success = true;
-    state.token = data.access_token;
-  },
-
-  auth_error(state) {
-    state.success = false
-  },
-
-  role_user(state, data) {
-    state.role = data.role;
-    state.nombre = data.nombres;
-    state.cargo = data.cargo;
-  },
-
-  user_ejecutora(state, data) {
-    state.codigo = data.codigo;
-    state.ejecutora = data.ejecutora;
-    state.anio = data.anio;
-  },
-
-  role_error(state) {
-    state.success = false
-    state.role = '';
-    state.nombre = '';
-    state.cargo = '';
-    state.codigo = '';
-    state.ejecutora = '';
-    state.anio = '';
-  },
-
-  logout(state) {
-    state.success = false
-    state.token = ''
-    state.role = ''
-    state.nombre = '';
-    state.cargo = '';
-  },
-
-  notify_active(state, data){
-    state.notify = data
-  }
 }
 
 export default mutations

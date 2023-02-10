@@ -93,8 +93,9 @@
 </template>
 
 <script>
-import { clientId, grantType, appName, appVersion } from '@/constants/config';
+import { clientId, grantType, appName, appVersion } from '@/environment/env.js';
 import vSelect from 'vue-select';
+import ReportesVue from './report/Reportes.vue';
 export default {
     components: {
         vSelect
@@ -122,8 +123,43 @@ export default {
     },
 
     methods: {
+        checkLogin(){
+            if(this.$store.state.auth.isUserLoggedIn()){
+                this.$vs.notify({
+                    title: 'Inicio de sesión',
+                    text: 'Ya tiene iniciada la sesión!',
+                    iconPack: 'feather',
+                    icon: 'icon-alert-circle',
+                    color: 'warning'
+                });
+                return false;
+            }
+            return true;
+        },
+
         initSession(){
+            if(!this.checkLogin()) return;
             this.$vs.loading();
+            const payload = {
+                username: this.usuario,
+                password: this.password
+            };
+            this.$store.dispatch("auth/login", payload)
+            .then(response => {
+                this.getRole(response.data);
+            })
+            .catch(err => {
+                this.$vs.loading.close();
+                this.$vs.dialog({
+                    type: 'alert',
+                    color: 'warning',
+                    title: `Aviso`,
+                    text: err.message,
+                    acceptText: 'Aceptar',
+                });
+            });
+
+            /*
             const obj = {
                 username: this.usuario,
                 password: this.password,
@@ -174,10 +210,43 @@ export default {
                     }
                 }
             });
-
+*/
         },
 
-        getRole(){
+        getRole(dataAuth){
+            this.$store.dispatch("auth/fetchRole")
+            .then(response => {
+                console.log(response.data);
+                const data = response.data;
+                data.unidadEjecutorias.forEach(element => {
+                    const item = {
+                        value: element.codigo,
+                        label: element.descripcion
+                    }
+                    this.itemsUnidadEjectora.push(item);
+                });
+                this.$vs.loading.close();
+                this.popupVerificacionEjecutora = true;
+
+                //this.$store.dispatch("auth/setValuesLocalStorage", dataAuth);
+                //this.$vs.loading.close();
+            })
+            .catch(err => {
+                this.$vs.loading.close();
+                this.$vs.dialog({
+                    type: 'alert',
+                    color: 'warning',
+                    title: `Aviso`,
+                    text: err.message,
+                    acceptText: 'Aceptar',
+                });
+            });
+        },
+
+
+
+
+        getRoles(){
             this.$store.dispatch("role")
             .then(response => {
                 const data = response.data;
