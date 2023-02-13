@@ -9,27 +9,6 @@ export default {
                 if(response.status === 200){
                     commit('SET_BEARER', response.data.access_token);
                     resolve(response);
-                    /*
-                    auth.role()
-                    .then( resp => {
-                        if(resp.status === 200){
-                            commit('UPDATE_USER_INFO', resp.data);
-                            localStorage.setItem('accessToken', response.data.access_token);
-                            localStorage.setItem('expiresIn', new Date().getTime() + response.data.expires_in * 1000);
-                            localStorage.setItem('sessionState', response.data.session_state);
-                            localStorage.setItem('loggedIn', 'true');
-                            router.push(router.currentRoute.query.to || '/');
-                        }
-                    })
-                    .catch( error => {
-                        localStorage.removeItem('accessToken');
-                        localStorage.removeItem('expiresIn');
-                        localStorage.removeItem('sessionState');
-                        localStorage.removeItem('loggedIn');
-                        localStorage.removeItem('userInfo');
-                        reject({message: 'Ocurrio un error al extraer la información del usuario.'});
-                    });
-                    */
                 }
             })
             .catch( error => {
@@ -38,20 +17,13 @@ export default {
                 localStorage.removeItem('sessionState');
                 localStorage.removeItem('loggedIn');
                 localStorage.removeItem('userInfo');
+                localStorage.removeItem("ejecInfo");
                 if(error.response.data.error_description === 'Account disabled'){
                     reject({message: 'El usuario bloqueado'})
                 }
                 reject({message: 'El usuario o contraseña es incorrecta'})
             });
         });
-    },
-
-    setValuesLocalStorage(context, dataAuth){
-        localStorage.setItem('accessToken', dataAuth.access_token);
-        localStorage.setItem('expiresIn', new Date().getTime() + dataAuth.expires_in * 1000);
-        localStorage.setItem('sessionState', dataAuth.session_state);
-        localStorage.setItem('loggedIn', 'true');
-        //router.push(router.currentRoute.query.to || '/');
     },
 
     fetchRole({ commit }){
@@ -72,9 +44,19 @@ export default {
                 localStorage.removeItem('sessionState');
                 localStorage.removeItem('loggedIn');
                 localStorage.removeItem('userInfo');
+                localStorage.removeItem("ejecInfo");
                 reject({message: 'Ocurrio un error al extraer la información del usuario.'});
             });
         });
+    },
+
+    setTokenAndEjecStorage({commit}, payload){
+        localStorage.setItem('accessToken', payload.dataAuth.access_token);
+        localStorage.setItem('expiresIn', new Date().getTime() + payload.dataAuth.expires_in * 1000);
+        localStorage.setItem('sessionState', payload.dataAuth.session_state);
+        localStorage.setItem('loggedIn', 'true');
+        commit('UPDATE_EJEC_INFO', payload.dataEjec);
+        router.push(router.currentRoute.query.to || '/');
     },
 
     logout({commit}){
@@ -86,6 +68,7 @@ export default {
                 localStorage.removeItem('sessionState');
                 localStorage.removeItem('loggedIn');
                 localStorage.removeItem('userInfo');
+                localStorage.removeItem("ejecInfo");
                 resolve({message: 'Sesión cerrado de formado correcta'});
                 router.push('/login');
             })
@@ -98,6 +81,7 @@ export default {
                     localStorage.removeItem('sessionState');
                     localStorage.removeItem('loggedIn');
                     localStorage.removeItem('userInfo');
+                    localStorage.removeItem("ejecInfo");
                     resolve({ message: 'Sesión cerrado de formado correcta' });
                     router.push('/login');
                 }
@@ -105,4 +89,14 @@ export default {
             });
         });
     },
+
+    cancel(context){
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('expiresIn');
+        localStorage.removeItem('sessionState');
+        localStorage.removeItem('loggedIn');
+        localStorage.removeItem('userInfo');
+        localStorage.removeItem("ejecInfo");
+    }
+    
 }

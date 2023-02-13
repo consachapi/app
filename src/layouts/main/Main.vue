@@ -241,74 +241,16 @@ export default {
     },
 
     createMenu(){
-      this.$store.dispatch("role")
-      .then(response => {
-        const role = response.data.role;
-        if(role === 'SUPER'){
-          this.navMenuItems = navMenuSuper;
-        } else if(role === 'ADMIN'){
-          this.navMenuItems = navMenuAdmin;
-        } else if(role === 'RESP'){
-          this.navMenuItems = navMenuAdmin;
-        } else {
-          this.navMenuItems = navMenuUser;
-        }
-      })
-      .catch(error => {
-        if(error.status === 400 || error.status === 404){
-          this.$vs.notify({
-            title: 'ALERTA',
-            text: 'Ocurrio un error al obtener datos.',
-            position:'top-center',
-            iconPack: 'feather',
-            icon: 'icon-alert-circle',
-            color: 'danger'
-          });
-          this.$store.dispatch("logout").then(() => {
-            this.$router.push('/login').catch(() => {})
-          });
-        }
-        if(error.status === 401 || error.status === 403){
-          this.$vs.dialog({
-              type: 'alert',
-              color: 'danger',
-              title: `Aviso`,
-              text: error.data === "" || error.data === null ? 'No tiene permisos para el sistema.' : error.data.message,
-              acceptText: 'Aceptar',
-          });
-          this.$store.dispatch("logout").then(() => {
-            this.$router.push('/login').catch(() => {})
-          });
-        }
-
-        if(error.status === 500){
-          this.$vs.notify({
-            title: 'Aviso',
-            text: 'Ocurrio algun error en el sistema.',
-            position:'top-center',
-            iconPack: 'feather',
-            icon: 'icon-alert-circle',
-            color: 'danger'
-          });
-          this.$store.dispatch("logout").then(() => {
-            this.$router.push('/login').catch(() => {})
-          });
-        }
-
-        if(error.message === 'ERROR_NETWORK'){
-          this.$vs.notify({
-            title: 'Aviso',
-            text: 'Ocurrio algún error en el sistema SIMECR. Comunicarse con el Administrador',
-            position:'top-center',
-            iconPack: 'feather',
-            icon: 'icon-alert-circle',
-            color: 'danger'
-          });
-          this.$store.dispatch("logout").then(() => {
-            this.$router.push('/login').catch(() => {})
-          });
-        }
-      });
+      const role = this.$store.state.auth.appActiveUser().role;
+      if(role === 'SUPER'){
+        this.navMenuItems = navMenuSuper;
+      } else if(role === 'ADMIN'){
+        this.navMenuItems = navMenuAdmin;
+      } else if(role === 'RESP'){
+        this.navMenuItems = navMenuAdmin;
+      } else {
+        this.navMenuItems = navMenuUser;
+      }
     },
 
     activeNotify(){
@@ -328,10 +270,11 @@ export default {
     this.setNavMenuVisibility(this.$store.state.mainLayoutType)
 
     this.createMenu();
-    this.activeNotify();
+    //this.activeNotify();
   },
 
   mounted(){
+    /*
     if(this.$store.getters.activeNotify){
       this.popupNotificacion = true;
       /*
@@ -349,8 +292,8 @@ export default {
         click: () => {
           this.$store.dispatch("notify", false);
         },
-      });*/
-    }
+      });
+    }*/
   }
 }
 

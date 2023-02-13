@@ -23,7 +23,10 @@ const router = new Router({
                 {
                     path: '/',
                     name: 'home',
-                    component: () => import('./views/pages/home/Home.vue')
+                    component: () => import('./views/pages/home/Home.vue'),
+                    meta: {
+                        authorize: [Role.Super, Role.Admin, Role.Resp, Role.User]
+                    }
                 },
                 /************************************************************************************/ 
                 {

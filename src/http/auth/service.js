@@ -26,11 +26,12 @@ export default {
     },
 
     role(){
-        axios.defaults.baseURL = 'http://10.0.10.54:7012/v1';/////DEVELOPER MODE
+        axios.defaults.baseURL = 'http://127.0.0.1:7012/v1';/////DEVELOPER MODE
         return axios.get('/usuario/roles');
     },
 
     logout () {
+        axios.defaults.baseURL = 'http://127.0.0.1:7012/v1';/////DEVELOPER MODE
         return axios.delete(`/usuario/logout/${ localStorage.getItem('sessionState') }`);
     },
 

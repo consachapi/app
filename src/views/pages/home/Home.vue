@@ -125,9 +125,9 @@ export default {
     },
 
     mounted(){
-        this.getDashboardMedidasControl();
+       /* this.getDashboardMedidasControl();
         this.getDashboardMedidasRemediacion();
-        this.getRiesgoDeficienciaTotal();
+        this.getRiesgoDeficienciaTotal();*/
     },
 
     methods: {

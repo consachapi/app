@@ -15,7 +15,16 @@ export default {
         Object.keys(userInfoLocalStorage).forEach((key) => {
             if (userInfo[key] === undefined && userInfoLocalStorage[key] !== null) userInfo[key] = userInfoLocalStorage[key]
         })
-        return userInfo
+        return userInfo;
+    },
+
+    appUnidadEjec: () => {
+        const ejecInfoLocalStorage = JSON.parse(localStorage.getItem('ejecInfo')) || {}
+        const ejecInfo = {}
+        Object.keys(ejecInfoLocalStorage).forEach((key) => {
+            if (ejecInfo[key] === undefined && ejecInfoLocalStorage[key] !== null) ejecInfo[key] = ejecInfoLocalStorage[key]
+        })
+        return ejecInfo
     }
 
 }

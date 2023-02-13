@@ -17,4 +17,23 @@ export default {
         localStorage.setItem("userInfo", JSON.stringify(userInfo))
     },
 
+    UPDATE_EJEC_INFO(state, payload){
+        if(payload === null || payload === undefined || payload === ''){
+            let ejecInfo = {
+                value: '',
+                label: 'Gobierno Regional de Cusco'
+            };
+            localStorage.setItem("ejecInfo", JSON.stringify(ejecInfo))
+        } else {
+            let ejecInfo = {};
+            for (const property of Object.keys(payload)) {
+                if (payload[property] != null) {
+                    state.appUnidadEjec[property] = payload[property]
+                    ejecInfo[property] = payload[property]
+                }
+            }
+            localStorage.setItem("ejecInfo", JSON.stringify(ejecInfo))
+        }
+    }
+
 }

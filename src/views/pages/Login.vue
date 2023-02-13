@@ -69,7 +69,7 @@
             </vx-card>
         </div>
 
-        <vs-popup title="Bienvenido" :active.sync="popupVerificacionEjecutora" @click="true">
+        <vs-popup title="Bienvenido" :active.sync="popupVerificacionEjecutora" button-close-hidden @close="closePopup" @click="true">
             <div class="flex flex-wrap items-center justify-center">
                 <strong>{{ nombresUsuario }}</strong>
             </div>
@@ -93,9 +93,10 @@
 </template>
 
 <script>
-import { clientId, grantType, appName, appVersion } from '@/environment/env.js';
+import { appName, appVersion } from '@/environment/env.js';
 import vSelect from 'vue-select';
-import ReportesVue from './report/Reportes.vue';
+import router from '@/router';
+
 export default {
     components: {
         vSelect
@@ -109,6 +110,8 @@ export default {
             password: "",
             checkbox_remember_me: false,
 
+            dataAuth: null,
+
             popupVerificacionEjecutora: false,
             nombresUsuario: null,
             selectedUnidadEjecutora: null,
@@ -118,11 +121,15 @@ export default {
 
     computed: {
         validateForm(){
-        return !this.errors.any() && this.usuario !== '' && this.password !== ''
+            return !this.errors.any() && this.usuario !== '' && this.password !== ''
         }
     },
 
     methods: {
+        closePopup(value){
+            if (!value) this.popupVerificacionEjecutora = true;
+        },
+
         checkLogin(){
             if(this.$store.state.auth.isUserLoggedIn()){
                 this.$vs.notify({
@@ -146,7 +153,8 @@ export default {
             };
             this.$store.dispatch("auth/login", payload)
             .then(response => {
-                this.getRole(response.data);
+                this.dataAuth = response.data;
+                this.getRole();
             })
             .catch(err => {
                 this.$vs.loading.close();
@@ -158,78 +166,38 @@ export default {
                     acceptText: 'Aceptar',
                 });
             });
-
-            /*
-            const obj = {
-                username: this.usuario,
-                password: this.password,
-                grant_type: grantType,
-                client_id: clientId
-            };
-            const data = Object.keys(obj)
-            .map((key, index) => `${key}=${encodeURIComponent(obj[key])}`)
-            .join('&');
-
-            this.$store.dispatch("login", data)
-            .then(response => {
-                this.$vs.loading.close();
-
-                console.log(response);
-
-                if(response.status === 200){
-                    this.$router.push('/').catch(() => {});
-                }
-            })
-            .catch(err => {
-                this.$vs.loading.close();
-                if(err.status === 401){
-                    this.$vs.dialog({
-                        type: 'alert',
-                        color: 'warning',
-                        title: `Aviso`,
-                        text: 'El usuario o contraseña es incorrecto.',
-                        acceptText: 'Aceptar',
-                    });
-                } else {
-                    if(err.status === 400 && err.data.error_description === 'Account disabled'){
-                        this.$vs.dialog({
-                            type: 'alert',
-                            color: 'danger',
-                            title: `Aviso`,
-                            text: 'Usuario está bloqueado.',
-                            acceptText: 'Aceptar',
-                        });
-                    } else {
-                        this.$vs.dialog({
-                            type: 'alert',
-                            color: 'danger',
-                            title: `Aviso`,
-                            text: 'Ocurrio un error inseperado. Intente mas tarde.',
-                            acceptText: 'Aceptar',
-                        });
-                    }
-                }
-            });
-*/
         },
 
-        getRole(dataAuth){
+        getRole(){
             this.$store.dispatch("auth/fetchRole")
             .then(response => {
-                console.log(response.data);
+                this.itemsUnidadEjectora = [];
                 const data = response.data;
-                data.unidadEjecutorias.forEach(element => {
-                    const item = {
-                        value: element.codigo,
-                        label: element.descripcion
-                    }
-                    this.itemsUnidadEjectora.push(item);
-                });
-                this.$vs.loading.close();
-                this.popupVerificacionEjecutora = true;
 
-                //this.$store.dispatch("auth/setValuesLocalStorage", dataAuth);
-                //this.$vs.loading.close();
+                if(data.unidadEjecutorias.length === 0) {
+                    this.setEjecValues();
+                } else if(data.unidadEjecutorias.length === 1){
+                    this.selectedUnidadEjecutora = { 
+                        value: data.unidadEjecutorias[0].codigo, 
+                        label: data.unidadEjecutorias[0].codigo + ' - ' + data.unidadEjecutorias[0].descripcion 
+                    };
+                    this.validateEjec();
+                    this.setEjecValues();
+                } else {
+                    this.selectedUnidadEjecutora = { 
+                        value: data.unidadEjecutorias[0].codigo, 
+                        label: data.unidadEjecutorias[0].codigo + ' - ' + data.unidadEjecutorias[0].descripcion 
+                    };
+                    data.unidadEjecutorias.forEach(element => {
+                        const item = {
+                            value: element.codigo,
+                            label: element.codigo + ' - ' + element.descripcion
+                        }
+                        this.itemsUnidadEjectora.push(item);
+                    });
+                    this.$vs.loading.close();
+                    this.popupVerificacionEjecutora = true;
+                }
             })
             .catch(err => {
                 this.$vs.loading.close();
@@ -241,74 +209,44 @@ export default {
                     acceptText: 'Aceptar',
                 });
             });
-        },
-
-
-
-
-        getRoles(){
-            this.$store.dispatch("role")
-            .then(response => {
-                const data = response.data;
-                data.ipress.forEach(element => {
-                const item = {
-                    value: element.id,
-                    label: element.nombre
-                }
-                this.listaIpress.push(item);
-                });
-                this.ipress = { value: data.ipress[0].id, label: data.ipress[0].nombre };
-                this.nombresUsuario = data.nombresCompleto;
-                //this.servicio = data.servicio;
-                this.$vs.loading.close();
-                this.popupVerificacionEjecutora = true;
-			})
-			.catch(error => {
-                this.$vs.loading.close();
-                if(error.message === 'REQUEST'){
-                this.$vs.dialog({
-                    type: 'alert',
-                    color: 'warning',
-                    title: `Aviso`,
-                    text: 'El sistema no responde. Comunicarse con el administrador.',
-                    acceptText: 'Aceptar',
-                });
-                } if(error.message === 'ERROR_NETWORK'){
-                this.$vs.notify({
-                    title: 'Aviso',
-                    text: 'El sistema no puede conectarse al servidor. Comunicarse con el administrador.',
-                    position:'top-center',
-                    iconPack: 'feather',
-                    icon: 'icon-alert-circle',
-                    color: 'danger'
-                });
-                } else {
-                this.$vs.notify({
-                    title: 'Aviso',
-                    text: 'No tiene permisos para el sistema.',
-                    position:'top-center',
-                    iconPack: 'feather',
-                    icon: 'icon-alert-circle',
-                    color: 'danger'
-                });
-                }
-                this.$store.dispatch("logout").then(() => {
-                this.$router.push('/login').catch(() => {})
-                });
-			});
         },
 
         aceptar() {
-
+            this.validateEjec();
+            this.popupVerificacionEjecutora = false;
+            this.$vs.loading();
+            setTimeout(() => {
+                this.$vs.loading.close();
+                this.setEjecValues();
+            }, 1000);
         },
 
         cancelar(){
-            this.popupVerificacionIpress = false;
-
-            this.$store.dispatch("logout").then(() => {
-                this.$router.push('/login').catch(() => {})
-            });
+            this.$store.dispatch("auth/cancel");
+            this.popupVerificacionEjecutora = false;
         },
+
+        setEjecValues(){
+            const payload = {
+                dataAuth: this.dataAuth, 
+                dataEjec: this.selectedUnidadEjecutora
+            };
+            this.$store.dispatch("auth/setTokenAndEjecStorage", payload);
+        },
+
+        validateEjec(){
+            if(this.selectedUnidadEjecutora === null || this.selectedUnidadEjecutora === '' || this.selectedUnidadEjecutora === undefined){
+                this.$vs.notify({
+                    title: 'Aviso',
+                    text: `Seleccione la Unidad Ejecutora o Entidad`,
+                    position:'top-center',
+                    iconPack: 'feather',
+                    icon: 'icon-alert-circle',
+                    color: 'warning'
+                });
+                return;
+            }
+        }
 
     }
 

@@ -30,7 +30,7 @@
 
     <div class="bookmark-container">
       <vs-chip transparent color="primary">
-          <span class="font-medium truncate mt-0"><strong>PERIODO {{ periodo }}</strong></span>
+          <h6 class="font-medium truncate mt-0 text-primary"><strong>{{ unidadEjecutora.label }}</strong></h6>
       </vs-chip>
       <!--<feather-icon icon="ArchiveIcon" :svgClasses="['stoke-current text-warning', textColor]" class="cursor-pointer p-2" @click.stop="showBookmarkPagesDropdown = !showBookmarkPagesDropdown" />-->
     </div>
@@ -55,11 +55,11 @@ export default {
   data() {
     return {
       showBookmarkPagesDropdown : false,
-      periodo: null
+      unidadEjecutora: null
     }
   },
   created(){
-    this.periodo = this.$store.state.periodo;
+    this.unidadEjecutora = this.$store.state.auth.appUnidadEjec();
   },
   watch: {
     '$route'() {
