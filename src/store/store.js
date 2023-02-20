@@ -9,6 +9,8 @@ import actions from "./actions"
 Vue.use(Vuex)
 
 import moduleAuth from './auth/moduleAuth.js';
+import moduleConfig from './config/moduleConfig.js';
+
 //import moduleAcceso from './acceso/moduleAcceso.js';
 import moduleControl from './control/moduleControl.js';
 import moduleRemediacion from './remediacion/moduleRemediacion.js';
@@ -22,6 +24,8 @@ export default new Vuex.Store({
     actions,
     modules: {
         auth: moduleAuth,
+        config: moduleConfig,
+
         control: moduleControl,
         remediacion: moduleRemediacion,
         //acceso: moduleAcceso,

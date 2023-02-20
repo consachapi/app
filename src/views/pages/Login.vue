@@ -95,7 +95,6 @@
 <script>
 import { appName, appVersion } from '@/environment/env.js';
 import vSelect from 'vue-select';
-import router from '@/router';
 
 export default {
     components: {
@@ -176,6 +175,7 @@ export default {
 
                 if(data.unidadEjecutorias.length === 0) {
                     this.setEjecValues();
+                    this.$vs.loading.close();
                 } else if(data.unidadEjecutorias.length === 1){
                     this.selectedUnidadEjecutora = { 
                         value: data.unidadEjecutorias[0].codigo, 
@@ -183,6 +183,7 @@ export default {
                     };
                     this.validateEjec();
                     this.setEjecValues();
+                    this.$vs.loading.close();
                 } else {
                     this.selectedUnidadEjecutora = { 
                         value: data.unidadEjecutorias[0].codigo, 

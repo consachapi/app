@@ -54,7 +54,7 @@ export default {
             this.$vs.loading({
                 scale: 0.7,
             });
-            console.log(this.data.method);
+            //console.log(this.data.method);
             this.$store.dispatch(this.data.method, this.data.id)
             .then(response => {
                 this.$vs.loading.close();

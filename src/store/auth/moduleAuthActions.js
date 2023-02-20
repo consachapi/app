@@ -38,7 +38,6 @@ export default {
                 }
             })
             .catch( error => {
-                console.log(error);
                 localStorage.removeItem('accessToken');
                 localStorage.removeItem('expiresIn');
                 localStorage.removeItem('sessionState');
@@ -73,6 +72,16 @@ export default {
                 router.push('/login');
             })
             .catch( error => {
+                if(error.message === 'Network Error'){
+                    localStorage.removeItem('accessToken');
+                    localStorage.removeItem('expiresIn');
+                    localStorage.removeItem('sessionState');
+                    localStorage.removeItem('loggedIn');
+                    localStorage.removeItem('userInfo');
+                    localStorage.removeItem("ejecInfo");
+                    resolve({ message: 'Sesión cerrado de formado correcta' });
+                    router.push('/login');
+                }
                 const status = error.response.status;
                 let message = "Ups!!!. Ocurrio un error al cerrar la sesión.";
                 if(status === 401){

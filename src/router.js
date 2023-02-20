@@ -298,7 +298,7 @@ const router = new Router({
                 {
                     path: '/app/configuracion/uejecutora',
                     name: 'app-configuracion-uejecutora',
-                    component: () => import('./views/pages/config/Configuracion.vue'),
+                    component: () => import('./views/pages/config/UnidadEjecutora.vue'),
                     meta: {
                         breadcrumb: [
                             { title: 'Inicio', url: '/' },
